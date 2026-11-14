@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>داشکا | داشکاندنەکانی سلێمانی</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #f5f7f8;
+      color: #182b35;
+    }
+    header {
+      background: #123c35;
+      color: white;
+      padding: 22px 6%;
+    }
+    .brand { font-size: 28px; font-weight: bold; }
+    .tagline { margin-top: 8px; color: #d5e9df; }
+    nav {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    nav a { color: white; text-decoration: none; }
+    .hero {
+      padding: 48px 6%;
+      background: #e1f0e8;
+    }
+    .hero h1 { font-size: 30px; margin-top: 0; }
+    .hero p { line-height: 1.9; }
+    .search {
+      width: 100%;
+      max-width: 500px;
+      padding: 14px;
+      border: 1px solid #ccd8d1;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+    main { padding: 30px 6%; }
+    .section-title { font-size: 23px; }
+    .offers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 3px 14px #0000000c;
+    }
+    .category { color: #52746a; font-size: 14px; }
+    .price { color: #14804a; font-size: 24px; font-weight: bold; }
+    .old { color: #888; text-decoration: line-through; }
+    .sample {
+      display: inline-block;
+      background: #fff0c7;
+      color: #765000;
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    button {
+      background: #176b50;
+      color: white;
+      border: 0;
+      padding: 11px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #65756d;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">داشکا</div>
+    <div class="tagline">باشترین داشکاندنەکان لە نزیک تۆ</div>
+    <nav>
+      <a href="#">سەرەتا</a>
+      <a href="#offers">ئۆفەرەکان</a>
+      <a href="#about">دەربارەمان</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>پێش کڕین، داشکاندنەکان ببینە!</h1>
+    <p>باشترین ئۆفەر و داشکاندنەکانی دوکانەکانی سلێمانی لە یەک شوێن.</p>
+    <input class="search" id="search" placeholder="بگەڕێ بۆ دوکان یان بەرهەم..." />
+  </section>
+
+  <main id="offers">
+    <h2 class="section-title">ئۆفەرەکانی ئەمڕۆ</h2>
+    <p>ئۆفەرەکان لەم نموونەیەدا خەیاڵین و تەنها بۆ پیشاندانن.</p>
+
+    <div class="offers" id="offerList">
+      <article class="card">
+        <span class="sample">نموونە</span>
+        <p class="category">جل و بەرگ</p>
+        <h3>دوکانی شیک</h3>
+        <p>داشکاندنی جلوبەرگی هاوینە</p>
+        <p><span class="old">50,000</span></p>
+        <p class="price">35,000 دینار</p>
+        <button>بینینی ئۆفەر</button>
+      </article>
+
+      <article class="card">
+        <span class="sample">نموونە</span>
+        <p class="category">ئەلیکترۆنیات</p>
+        <h3>جیهانی مۆبایل</h3>
+        <p>داشکاندن لەسەر ئامێرەکان</p>
+        <p><span class="old">200,000</span></p>
+        <p class="price">175,000 دینار</p>
+        <button>بینینی ئۆفەر</button>
+      </article>
+
+      <article class="card">
+        <span class="sample">نموونە</span>
+        <p class="category">خواردن</p>
+        <h3>کافێی دڵخواز</h3>
+        <p>داشکاندن لەسەر خواردن و خواردنەوە</p>
+        <p><span class="old">10,000</span></p>
+        <p class="price">7,000 دینار</p>
+        <button>بینینی ئۆفەر</button>
+      </article>
+    </div>
+
+    <section id="about">
+      <h2>دەربارەی داشکا</h2>
+      <p>ئامانجمان ئەوەیە یارمەتی کڕیار بدەین باشترین ئۆفەر بدۆزێتەوە و یارمەتی دوکانەکان بدەین کڕیاری نوێ بدۆزنەوە.</p>
+    </section>
+  </main>
+
+  <footer>داشکا © 2026 — هەموو مافەکان پارێزراون</footer>
+
+  <script>
+    document.getElementById("search").addEventListener("input", function() {
+      const query = this.value.toLowerCase();
+      document.querySelectorAll(".card").forEach(function(card) {
+        card.style.display = card.innerText.toLowerCase().includes(query) ? "" : "none";
+      });
+    });
+  </script>
+</body>
+</html>
