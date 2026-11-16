@@ -5,397 +5,233 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DASHKA | داشکا</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
-  --green:#123c35;
-  --green2:#176b50;
-  --light:#eaf4ee;
-  --gold:#f3bd50;
-  --text:#20332e;
-  --muted:#718078;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  font-family:Tahoma,Arial,sans-serif;
-  background:#f7f9f7;
-  color:var(--text);
-}
-header {
-  background:var(--green);
-  color:white;
-  padding:18px 6%;
-}
-.top {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  flex-wrap:wrap;
-}
-.logo { font-size:27px; font-weight:900; letter-spacing:1px; }
-.logo span { color:var(--gold); }
-.lang {
-  border:1px solid #ffffff55;
-  border-radius:9px;
-  padding:9px 12px;
-  background:#ffffff12;
-  color:white;
-}
-nav {
-  display:flex;
-  gap:24px;
-  margin-top:20px;
-  flex-wrap:wrap;
-}
-nav a { color:#e1eee8; text-decoration:none; font-size:14px; }
-.hero {
-  background:linear-gradient(130deg,#123c35,#247354);
-  color:white;
-  padding:55px 6% 65px;
-}
-.hero h1 { font-size:clamp(27px,5vw,43px); margin:0 0 15px; }
-.hero p { line-height:2; color:#e0eee5; max-width:580px; }
-.searchbox {
-  display:flex;
-  max-width:590px;
-  background:white;
-  border-radius:12px;
-  padding:6px;
-  margin-top:25px;
-}
-.searchbox input {
-  flex:1;
-  min-width:0;
-  border:0;
-  outline:0;
-  padding:13px;
-  font-size:15px;
-  font-family:inherit;
-}
-.searchbox button {
-  border:0;
-  background:var(--gold);
-  color:#382900;
-  border-radius:9px;
-  padding:0 20px;
-  font-weight:bold;
-  cursor:pointer;
-}
-main { padding:32px 6%; }
-.section-head {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-bottom:18px;
-}
-h2 { font-size:22px; margin:0; }
-.small { color:var(--muted); font-size:13px; }
-.categories {
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  padding:5px 0 18px;
-}
-.category {
-  border:1px solid #dce7df;
-  background:white;
-  color:var(--text);
-  border-radius:30px;
-  padding:10px 17px;
-  white-space:nowrap;
-  cursor:pointer;
-  font-family:inherit;
-}
-.category.active {
-  background:var(--green);
-  color:white;
-  border-color:var(--green);
-}
-.offers {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-  gap:18px;
-}
-.card {
-  background:white;
-  border:1px solid #e8eee9;
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 5px 18px #183c3010;
-}
-.picture {
-  height:145px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:55px;
-  background:var(--light);
-  position:relative;
-}
-.discount {
-  position:absolute;
-  top:12px;
-  right:12px;
-  background:#d83d3d;
-  color:white;
-  border-radius:7px;
-  padding:6px 10px;
-  font-size:13px;
-  font-weight:bold;
-}
-.sample {
-  position:absolute;
-  left:12px;
-  top:12px;
-  background:#fff0c7;
-  color:#765000;
-  padding:5px 8px;
-  border-radius:6px;
-  font-size:11px;
-}
-.card-body { padding:17px; }
-.store { font-size:13px; color:var(--muted); }
-.card h3 { margin:9px 0; font-size:18px; }
-.description { color:var(--muted); font-size:13px; line-height:1.8; min-height:42px; }
-.prices { display:flex; align-items:center; gap:10px; margin:14px 0; }
-.old { color:#9a9a9a; text-decoration:line-through; font-size:13px; }
-.new { color:var(--green2); font-size:21px; font-weight:bold; }
-.expiry { font-size:12px; color:#8a6a28; margin-bottom:13px; }
-.details {
-  width:100%;
-  background:var(--green2);
-  color:white;
-  border:0;
-  padding:12px;
-  border-radius:9px;
-  font-family:inherit;
-  cursor:pointer;
-}
-.empty {
-  display:none;
-  text-align:center;
-  color:var(--muted);
-  padding:35px;
-  background:white;
-  border-radius:14px;
-}
-.info {
-  margin-top:35px;
-  background:#eaf4ee;
-  border-radius:16px;
-  padding:25px;
-  line-height:2;
-}
-footer {
-  background:var(--green);
-  color:#dcebe2;
-  text-align:center;
-  padding:25px;
-  margin-top:35px;
-  font-size:13px;
-  line-height:2;
-}
-@media(max-width:520px) {
-  .hero { padding-top:38px; }
-  nav { gap:15px; }
-  main { padding:25px 5%; }
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7f4;color:#173b2d}
+header{background:#123d2c;color:white;padding:22px 7%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.logo{font-size:27px;font-weight:bold}
+.logo span{color:#e8bd58}
+select,input{padding:12px;border:1px solid #ddd;border-radius:10px;font-size:15px}
+.hero{text-align:center;padding:65px 15px;background:#e7efe8}
+.hero h1{font-size:36px;margin:0 0 15px}
+.hero p{font-size:18px;color:#52695d}
+.search{width:min(500px,90%);margin-top:20px}
+.categories{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;padding:25px 12px}
+.categories button{border:0;border-radius:25px;padding:12px 20px;background:#e1e9e2;color:#173b2d;cursor:pointer}
+.categories button.active{background:#174c36;color:white}
+main{max-width:1150px;margin:auto;padding:10px 18px 60px}
+.section-title{font-size:25px;margin:15px 0 25px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:20px}
+.card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 18px #173b2d12}
+.card img{width:100%;height:175px;object-fit:cover;background:#e7efe8}
+.card-content{padding:17px}
+.store{color:#728579;font-size:14px}
+.card h3{margin:10px 0}
+.price{font-size:19px;font-weight:bold;color:#174c36}
+.old{text-decoration:line-through;color:#999;font-size:14px;margin-inline-start:8px}
+.discount{display:inline-block;background:#fce8d7;color:#a44b18;padding:6px 10px;border-radius:8px;font-weight:bold}
+.status{text-align:center;padding:35px;color:#52695d}
+.about{text-align:center;background:#e7efe8;padding:45px 15px}
+footer{text-align:center;padding:25px;background:#123d2c;color:white}
+@media(max-width:600px){.hero h1{font-size:28px}header{justify-content:center}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="top">
-    <div class="logo">DASHKA<span>.</span> داشکا</div>
-    <select class="lang" id="language" aria-label="Language">
-      <option value="ku">کوردی</option>
-      <option value="ar">العربية</option>
-      <option value="en">English</option>
-    </select>
-  </div>
-  <nav>
-    <a href="#">سەرەتا</a>
-    <a href="#offers">ئۆفەرەکان</a>
-    <a href="#about">دەربارەمان</a>
-  </nav>
+  <div class="logo">DASHKA<span>.</span> داشکا</div>
+  <select id="language" aria-label="Language">
+    <option value="ku">کوردی</option>
+    <option value="ar">العربية</option>
+    <option value="en">English</option>
+  </select>
 </header>
 
 <section class="hero">
-  <h1 id="headline">باشترین داشکاندنەکان لە نزیک تۆ!</h1>
-  <p id="subheadline">پێش ئەوەی بکڕیت، ئۆفەرەکان ببینە. داشکاندنی دوکانەکانی سلێمانی لە یەک شوێن.</p>
-  <div class="searchbox">
-    <input id="search" placeholder="بگەڕێ بۆ دوکان یان بەرهەم..." />
-    <button id="searchButton">گەڕان</button>
-  </div>
+  <h1 id="headline">باشترین ئۆفەرەکان لە شارەکەت</h1>
+  <p id="subtitle">داشکاندنە ڕاستەقینەکان لە دووکانەکانی نزیکت</p>
+  <input class="search" id="search" placeholder="گەڕان بۆ ئۆفەر یان دووکان...">
 </section>
 
-<main id="offers">
-  <div class="section-head">
-    <h2 id="offerTitle">ئۆفەرەکان</h2>
-    <span class="small" id="offerCount">٣ ئۆفەری نموونە</span>
+<nav class="categories" id="categories">
+  <button class="active" data-category="all">هەموو</button>
+  <button data-category="clothes">جل و بەرگ</button>
+  <button data-category="electronics">ئەلیکترۆنیات</button>
+  <button data-category="food">خواردن</button>
+  <button data-category="home">ماڵەوە</button>
+</nav>
+
+<main>
+  <h2 class="section-title" id="offers-title">نوێترین ئۆفەرەکان</h2>
+  <div id="offers" class="grid">
+    <div class="status">چاوەڕێ بە... ئۆفەرەکان دەهێنین.</div>
   </div>
-
-  <div class="categories" id="categories">
-    <button class="category active" data-category="all">هەمووی</button>
-    <button class="category" data-category="clothes">جل و بەرگ</button>
-    <button class="category" data-category="electronics">ئەلیکترۆنیات</button>
-    <button class="category" data-category="food">خواردن</button>
-    <button class="category" data-category="home">ماڵ و ژیان</button>
-  </div>
-
-  <div class="offers" id="offerList">
-    <article class="card" data-category="clothes" data-search="دوکانی شیک جلوبەرگ جل و بەرگ">
-      <div class="picture">
-        👕
-        <span class="discount">٣٠٪ داشکاندن</span>
-        <span class="sample">نموونە</span>
-      </div>
-      <div class="card-body">
-        <div class="store">جل و بەرگ</div>
-        <h3>دوکانی شیک</h3>
-        <div class="description">داشکاندنی جلوبەرگی هاوینە</div>
-        <div class="prices"><span class="old">50,000</span><span class="new">35,000 د.ع</span></div>
-        <div class="expiry">⏳ ئۆفەری نموونە</div>
-        <button class="details" data-name="دوکانی شیک">بینینی ئۆفەر</button>
-      </div>
-    </article>
-
-    <article class="card" data-category="electronics" data-search="جیهانی مۆبایل ئەلیکترۆنیات مۆبایل">
-      <div class="picture">
-        📱
-        <span class="discount">١٢٪ داشکاندن</span>
-        <span class="sample">نموونە</span>
-      </div>
-      <div class="card-body">
-        <div class="store">ئەلیکترۆنیات</div>
-        <h3>جیهانی مۆبایل</h3>
-        <div class="description">داشکاندن لەسەر ئامێرە ئەلیکترۆنییەکان</div>
-        <div class="prices"><span class="old">200,000</span><span class="new">175,000 د.ع</span></div>
-        <div class="expiry">⏳ ئۆفەری نموونە</div>
-        <button class="details" data-name="جیهانی مۆبایل">بینینی ئۆفەر</button>
-      </div>
-    </article>
-
-    <article class="card" data-category="food" data-search="کافێی دڵخواز خواردن خواردنەوە کافێ">
-      <div class="picture">
-        ☕
-        <span class="discount">٣٠٪ داشکاندن</span>
-        <span class="sample">نموونە</span>
-      </div>
-      <div class="card-body">
-        <div class="store">خواردن و خواردنەوە</div>
-        <h3>کافێی دڵخواز</h3>
-        <div class="description">داشکاندن لەسەر خواردن و خواردنەوە</div>
-        <div class="prices"><span class="old">10,000</span><span class="new">7,000 د.ع</span></div>
-        <div class="expiry">⏳ ئۆفەری نموونە</div>
-        <button class="details" data-name="کافێی دڵخواز">بینینی ئۆفەر</button>
-      </div>
-    </article>
-  </div>
-
-  <div class="empty" id="empty">هیچ ئۆفەرێک نەدۆزرایەوە.</div>
-
-  <section class="info" id="about">
-    <h2>دەربارەی داشکا</h2>
-    <p>داشکا پلاتفۆرمێکە بۆ دۆزینەوەی ئۆفەر و داشکاندنەکانی دوکانەکان. ئامانجمان ئەوەیە کڕیار پارەی کەمتر خەرج بکات و دوکانەکان کڕیاری نوێ بدۆزنەوە.</p>
-    <p><strong>تێبینی:</strong> هەموو ئۆفەرە پیشاندراوەکان لەم وەشانەدا نموونەیی و خەیاڵین.</p>
-  </section>
 </main>
 
-<footer>
-  <strong>DASHKA | داشکا</strong><br>
-  پێش کڕین، ئۆفەرەکان ببینە.<br>
-  © 2026 DASHKA
-</footer>
+<section class="about">
+  <h2 id="about-title">دەربارەی داشکا</h2>
+  <p id="about-text">داشکا پلاتفۆرمێکە بۆ دۆزینەوەی باشترین داشکاندنەکان لە دووکانەکان.</p>
+</section>
+
+<footer>© 2026 DASHKA | داشکا</footer>
 
 <script>
-const search = document.getElementById("search");
-const cards = [...document.querySelectorAll(".card")];
-const buttons = [...document.querySelectorAll(".category")];
-const empty = document.getElementById("empty");
-const count = document.getElementById("offerCount");
-let selectedCategory = "all";
+const SUPABASE_URL = "https://ldpgevhfafvlcgoohshj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_SKnTHunKbdx5dpL3KR4Z7w_3akl-aIV";
 
-function filterOffers() {
-  const query = search.value.trim().toLowerCase();
-  let visible = 0;
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  cards.forEach(card => {
-    const categoryMatch = selectedCategory === "all" ||
-      card.dataset.category === selectedCategory;
-    const searchMatch = (card.dataset.search + " " + card.innerText)
-      .toLowerCase().includes(query);
-    const show = categoryMatch && searchMatch;
-    card.style.display = show ? "" : "none";
-    if (show) visible++;
-  });
+let allOffers = [];
+let currentCategory = "all";
+let currentLanguage = "ku";
 
-  empty.style.display = visible ? "none" : "block";
-  count.textContent = visible + " ئۆفەر";
-}
-
-search.addEventListener("input", filterOffers);
-document.getElementById("searchButton").addEventListener("click", filterOffers);
-
-buttons.forEach(button => {
-  button.addEventListener("click", () => {
-    buttons.forEach(item => item.classList.remove("active"));
-    button.classList.add("active");
-    selectedCategory = button.dataset.category;
-    filterOffers();
-  });
-});
-
-document.querySelectorAll(".details").forEach(button => {
-  button.addEventListener("click", () => {
-    alert("ئەمە ئۆفەرێکی نموونەییە لە " + button.dataset.name);
-  });
-});
-
-const translations = {
+const words = {
   ku: {
-    direction:"rtl",
-    headline:"باشترین داشکاندنەکان لە نزیک تۆ!",
-    sub:"پێش ئەوەی بکڕیت، ئۆفەرەکان ببینە. داشکاندنی دوکانەکانی سلێمانی لە یەک شوێن.",
-    search:"بگەڕێ بۆ دوکان یان بەرهەم...",
-    searchButton:"گەڕان",
-    offerTitle:"ئۆفەرەکان",
-    categories:["هەمووی","جل و بەرگ","ئەلیکترۆنیات","خواردن","ماڵ و ژیان"]
+    headline:"باشترین ئۆفەرەکان لە شارەکەت",
+    subtitle:"داشکاندنە ڕاستەقینەکان لە دووکانەکانی نزیکت",
+    search:"گەڕان بۆ ئۆفەر یان دووکان...",
+    categories:["هەموو","جل و بەرگ","ئەلیکترۆنیات","خواردن","ماڵەوە"],
+    offers:"نوێترین ئۆفەرەکان",
+    about:"دەربارەی داشکا",
+    aboutText:"داشکا پلاتفۆرمێکە بۆ دۆزینەوەی باشترین داشکاندنەکان لە دووکانەکان.",
+    empty:"هیچ ئۆفەرێک نەدۆزرایەوە.",
+    loading:"چاوەڕێ بە... ئۆفەرەکان دەهێنین.",
+    error:"نەتوانرا ئۆفەرەکان بهێنرێن. تکایە دواتر هەوڵ بدەرەوە."
   },
   ar: {
-    direction:"rtl",
-    headline:"أفضل الخصومات بالقرب منك!",
-    sub:"شاهد العروض قبل الشراء. اكتشف خصومات متاجر السليمانية في مكان واحد.",
-    search:"ابحث عن متجر أو منتج...",
-    searchButton:"بحث",
-    offerTitle:"العروض",
-    categories:["الكل","ملابس","إلكترونيات","طعام","المنزل"]
+    headline:"أفضل العروض في مدينتك",
+    subtitle:"خصومات حقيقية من المتاجر القريبة منك",
+    search:"ابحث عن عرض أو متجر...",
+    categories:["الكل","ملابس","إلكترونيات","طعام","منزل"],
+    offers:"أحدث العروض",
+    about:"عن داشكا",
+    aboutText:"داشكا منصة لاكتشاف أفضل الخصومات في المتاجر.",
+    empty:"لم يتم العثور على عروض.",
+    loading:"يرجى الانتظار... جارٍ تحميل العروض.",
+    error:"تعذر تحميل العروض. حاول مرة أخرى لاحقاً."
   },
   en: {
-    direction:"ltr",
-    headline:"The best deals near you!",
-    sub:"Check offers before you shop. Discover store discounts in Sulaymaniyah in one place.",
-    search:"Search for a store or product...",
-    searchButton:"Search",
-    offerTitle:"Offers",
-    categories:["All","Clothing","Electronics","Food","Home"]
+    headline:"The best offers in your city",
+    subtitle:"Real discounts from stores near you",
+    search:"Search offers or stores...",
+    categories:["All","Clothing","Electronics","Food","Home"],
+    offers:"Latest offers",
+    about:"About Dashka",
+    aboutText:"Dashka helps you discover the best discounts at local stores.",
+    empty:"No offers found.",
+    loading:"Please wait... Loading offers.",
+    error:"Could not load offers. Please try again later."
   }
 };
 
-document.getElementById("language").addEventListener("change", event => {
-  const t = translations[event.target.value];
-  document.documentElement.lang = event.target.value;
-  document.documentElement.dir = t.direction;
-  document.getElementById("headline").textContent = t.headline;
-  document.getElementById("subheadline").textContent = t.sub;
-  search.placeholder = t.search;
-  document.getElementById("searchButton").textContent = t.searchButton;
-  document.getElementById("offerTitle").textContent = t.offerTitle;
-  buttons.forEach((button, i) => button.textContent = t.categories[i]);
+function updateLanguage(){
+  const w = words[currentLanguage];
+  document.documentElement.lang = currentLanguage;
+  document.documentElement.dir = currentLanguage === "en" ? "ltr" : "rtl";
+  document.getElementById("headline").textContent = w.headline;
+  document.getElementById("subtitle").textContent = w.subtitle;
+  document.getElementById("search").placeholder = w.search;
+  document.getElementById("offers-title").textContent = w.offers;
+  document.getElementById("about-title").textContent = w.about;
+  document.getElementById("about-text").textContent = w.aboutText;
+
+  document.querySelectorAll("#categories button").forEach((button,i)=>{
+    button.textContent = w.categories[i];
+  });
+  renderOffers();
+}
+
+function safe(value){
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[char]));
+}
+
+function renderOffers(){
+  const container = document.getElementById("offers");
+  const search = document.getElementById("search").value.trim().toLowerCase();
+
+  const filtered = allOffers.filter(offer=>{
+    const title = offer["title_"+currentLanguage] || offer.title_ku || "";
+    const matchesSearch =
+      title.toLowerCase().includes(search) ||
+      String(offer.store_name || "").toLowerCase().includes(search);
+    const matchesCategory =
+      currentCategory === "all" || offer.category === currentCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  if(!filtered.length){
+    container.innerHTML = `<div class="status">${words[currentLanguage].empty}</div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(offer=>{
+    const title = offer["title_"+currentLanguage] || offer.title_ku || "";
+    const original = Number(offer.original_price || 0);
+    const price = Number(offer.discount_price || 0);
+    const discount = offer.discount_percent ||
+      (original > 0 ? Math.round((original-price)/original*100) : 0);
+    const image = offer.image_url || "";
+
+    return `
+      <article class="card">
+        <img src="${safe(image)}" alt="${safe(title)}"
+          onerror="this.style.display='none'">
+        <div class="card-content">
+          <div class="store">${safe(offer.store_name)}</div>
+          <h3>${safe(title)}</h3>
+          <div class="price">${price.toLocaleString()} د.ع
+            ${original > 0 ? `<span class="old">${original.toLocaleString()} د.ع</span>` : ""}
+          </div>
+          ${discount > 0 ? `<p><span class="discount">${discount}% داشکاندن</span></p>` : ""}
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+async function loadOffers(){
+  const container = document.getElementById("offers");
+  container.innerHTML = `<div class="status">${words[currentLanguage].loading}</div>`;
+
+  const {data,error} = await db
+    .from("offers")
+    .select("*")
+    .eq("is_active",true)
+    .lte("start_date",new Date().toISOString())
+    .gte("end_date",new Date().toISOString())
+    .order("created_at",{ascending:false});
+
+  if(error){
+    console.error("Supabase error:",error);
+    container.innerHTML = `<div class="status">${words[currentLanguage].error}</div>`;
+    return;
+  }
+
+  allOffers = data || [];
+  renderOffers();
+}
+
+document.getElementById("language").addEventListener("change",event=>{
+  currentLanguage = event.target.value;
+  updateLanguage();
 });
+
+document.getElementById("search").addEventListener("input",renderOffers);
+
+document.querySelectorAll("#categories button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll("#categories button").forEach(b=>b.classList.remove("active"));
+    button.classList.add("active");
+    currentCategory = button.dataset.category;
+    renderOffers();
+  });
+});
+
+updateLanguage();
+loadOffers();
 </script>
 </body>
 </html>
