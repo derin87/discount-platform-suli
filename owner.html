@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>داشبۆردی فرۆشگا | داشکا</title>
+<link rel="stylesheet" href="owner.css">
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2"></script>
+<script defer src="dashka-client.js"></script>
+<script defer src="owner.js"></script>
+</head>
+<body>
+<header><a href="./">داشکا <span>DASHKA</span></a><button id="signout" hidden>چوونەدەرەوە</button></header>
+<main>
+<h1>داشبۆردی فرۆشگا</h1>
+<p id="message" role="status" aria-live="polite">چاوەڕێ بە…</p>
+<form id="login" class="panel" hidden>
+  <h2>چوونەژوورەوە</h2>
+  <label>ئیمەیڵ<input name="email" type="email" autocomplete="username" dir="ltr" required></label>
+  <label>وشەی نهێنی<input name="password" type="password" autocomplete="current-password" dir="ltr" required></label>
+  <button>چوونەژوورەوە</button>
+</form>
+<section id="dashboard" hidden>
+  <form id="store" class="panel">
+    <h2>زانیاریی فرۆشگا</h2>
+    <p id="approval"></p>
+    <div class="fields">
+      <label>ناوی فرۆشگا<input name="store_name" maxlength="150" required></label>
+      <label>ژمارەی تەلەفۆن<input name="phone" maxlength="40" type="tel" dir="ltr"></label>
+      <label>ناونیشان<input name="address" maxlength="300"></label>
+    </div>
+    <button>پاشەکەوتکردن</button>
+  </form>
+  <form id="offer" class="panel" hidden>
+    <h2 id="offer-title">ئۆفەری نوێ</h2>
+    <div class="fields">
+      <label>ناونیشانی کوردی<input name="title_ku" required maxlength="150"></label>
+      <label>ناونیشانی عەرەبی<input name="title_ar" maxlength="150"></label>
+      <label>ناونیشانی ئینگلیزی<input name="title_en" maxlength="150" dir="ltr"></label>
+      <label>پۆل<select name="category" required><option value="">هەڵبژێرە</option><option value="clothes">جل و بەرگ</option><option value="electronics">ئەلیکترۆنیات</option><option value="food">خواردن</option><option value="home">ماڵەوە</option></select></label>
+      <label>نرخی پێشوو (دینار)<input name="original_price" type="number" min="1" max="1000000000" step="any" required></label>
+      <label>نرخی داشکاو (دینار)<input name="discount_price" type="number" min="0" step="any" required></label>
+      <label>دەستپێک (کاتی سلێمانی)<input name="start_date" type="datetime-local" required></label>
+      <label>کۆتایی (کاتی سلێمانی)<input name="end_date" type="datetime-local" required></label>
+    </div>
+    <label>وەسف<textarea name="description" maxlength="2000" rows="3"></textarea></label>
+    <label>وێنە (JPG، PNG یان WebP، تا ٥ مێگابایت)<input name="image" type="file" accept="image/jpeg,image/png,image/webp"></label>
+    <p id="discount"></p>
+    <button>ناردن بۆ پەسەندکردن</button>
+    <button id="cancel" class="secondary" type="button" hidden>هەڵوەشاندنەوە</button>
+  </form>
+  <section class="panel" id="offer-list" hidden>
+    <h2>ئۆفەرەکانم</h2>
+    <div id="offers"></div>
+  </section>
+</section>
+</main>
+</body>
+</html>
