@@ -153,11 +153,21 @@ async function action(work, success = '', failure = 'کارەکە تەواو ن�
   }
 }
 
+function iraqiMobile(value) {
+  const digits = value.trim().replace(/[٠-٩۰-۹]/g, digit =>
+    String(digit.charCodeAt(0) - (digit <= '٩' ? 0x660 : 0x6f0))
+  ).replace(/[\s()-]/g, '');
+  const match = /^(?:0|\+964|00964)(7[0-9]{9})$/.exec(digits);
+  return match ? '+964' + match[1] : null;
+}
+
 login.addEventListener('submit', event => {
   event.preventDefault();
-  const {email, password} = login.elements;
+  const phone = iraqiMobile(login.elements.phone.value);
+  const password = login.elements.password.value;
+  if (!phone) return notify('ژمارەی مۆبایلی عێراقی بە شێوەی 07 یان ‎+964 بنووسە.', true);
   action(async () => {
-    const {data, error} = await db.auth.signInWithPassword({email: email.value.trim(), password: password.value});
+    const {data, error} = await db.auth.signInWithPassword({phone, password});
     if (error) throw error;
     await showSession(data.user);
   }, '', 'چوونەژوورەوە یان بارکردنی داشبۆرد سەرکەوتوو نەبوو.');
