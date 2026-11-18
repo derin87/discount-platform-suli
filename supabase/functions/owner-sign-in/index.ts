@@ -38,17 +38,19 @@ Deno.serve(async (request: Request) => {
       body: JSON.stringify({ login_phone: phone }),
     });
     if (!lookup.ok) return reply(503, failure);
-    const email = await lookup.json();
-    if (typeof email !== "string" || !email) return reply(401, failure);
+    const account = await lookup.json();
+    if (!account || typeof account.email !== "string" || !account.email ||
+        typeof account.user_id !== "string") return reply(401, failure);
 
     const auth = await fetch(url + "/auth/v1/token?grant_type=password", {
       method: "POST",
       headers: { apikey: publishableKey, "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email: account.email, password }),
     });
     if (!auth.ok) return reply(401, failure);
 
-    const { access_token, refresh_token } = await auth.json();
+    const { access_token, refresh_token, user } = await auth.json();
+    if (user?.id !== account.user_id) return reply(401, failure);
     if (typeof access_token !== "string" || typeof refresh_token !== "string") {
       return reply(503, failure);
     }

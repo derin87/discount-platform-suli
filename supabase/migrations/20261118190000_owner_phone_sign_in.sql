@@ -9,7 +9,7 @@ create table dashka_private.owner_login_phone (
 revoke all on dashka_private.owner_login_phone from public, anon, authenticated;
 
 -- Charge a login attempt atomically, including simultaneous requests.
-create function public.dashka_begin_owner_sign_in(login_phone text) returns text
+create function public.dashka_begin_owner_sign_in(login_phone text) returns jsonb
 language sql security definer set search_path = ''
 as $$
   update dashka_private.owner_login_phone p
@@ -18,7 +18,7 @@ as $$
   from auth.users u
   where p.phone = login_phone and u.id = p.user_id and u.email_confirmed_at is not null
     and (p.attempts < 8 or p.window_start <= now() - interval '10 minutes')
-  returning u.email
+  returning jsonb_build_object('email', u.email, 'user_id', u.id)
 $$;
 
 revoke all on function public.dashka_begin_owner_sign_in(text) from public, anon, authenticated;
