@@ -41,6 +41,7 @@ footer{text-align:center;padding:25px;background:#123d2c;color:white}
 
 <header>
   <div class="logo">DASHKA<span>.</span> داشکا</div>
+  <a href="owner.html" style="color:inherit">داشبۆردی فرۆشگا</a>
   <select id="language" aria-label="Language">
     <option value="ku">کوردی</option>
     <option value="ar">العربية</option>
@@ -76,12 +77,8 @@ footer{text-align:center;padding:25px;background:#123d2c;color:white}
 
 <footer>© 2026 DASHKA | داشکا</footer>
 
+<script src="dashka-client.js"></script>
 <script>
-const SUPABASE_URL = "https://ldpgevhfafvlcgoohshj.supabase.co";
-const SUPABASE_KEY = "sb_publishable_SKnTHunKbdx5dpL3KR4Z7w_3akl-aIV";
-
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
 let allOffers = [];
 let currentCategory = "all";
 let currentLanguage = "ku";
@@ -171,14 +168,14 @@ function renderOffers(){
     const title = offer["title_"+currentLanguage] || offer.title_ku || "";
     const original = Number(offer.original_price || 0);
     const price = Number(offer.discount_price || 0);
-    const discount = offer.discount_percent ||
+    const discount = Number(offer.discount_percent) ||
       (original > 0 ? Math.round((original-price)/original*100) : 0);
-    const image = offer.image_url || "";
+    const image = offer.image_path ? offer.signedImage : offer.image_url;
 
     return `
       <article class="card">
-        <img src="${safe(image)}" alt="${safe(title)}"
-          onerror="this.style.display='none'">
+        ${image ? `<img src="${safe(image)}" alt="${safe(title)}" loading="lazy"
+          onerror="this.style.display='none'">` : ""}
         <div class="card-content">
           <div class="store">${safe(offer.store_name)}</div>
           <h3>${safe(title)}</h3>
@@ -211,6 +208,12 @@ async function loadOffers(){
   }
 
   allOffers = data || [];
+  const paths = [...new Set(allOffers.map(offer => offer.image_path).filter(Boolean))];
+  if (paths.length) {
+    const {data: images} = await db.storage.from("dashka-offer-images").createSignedUrls(paths, 300);
+    const urls = new Map((images || []).map(image => [image.path, image.signedUrl]));
+    for (const offer of allOffers) offer.signedImage = urls.get(offer.image_path);
+  }
   renderOffers();
 }
 

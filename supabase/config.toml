@@ -1,0 +1,4 @@
+project_id = "dashka"
+
+[functions.owner-sign-in]
+verify_jwt = false
