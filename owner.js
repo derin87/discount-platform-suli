@@ -167,7 +167,10 @@ login.addEventListener('submit', event => {
   const password = login.elements.password.value;
   if (!phone) return notify('ژمارەی مۆبایلی عێراقی بە شێوەی 07 یان ‎+964 بنووسە.', true);
   action(async () => {
-    const {data, error} = await db.auth.signInWithPassword({phone, password});
+    const result = await db.functions.invoke('owner-sign-in', {body: {phone, password}});
+    if (result.error || !result.data) throw new Error('Sign-in failed');
+    const {access_token, refresh_token} = result.data;
+    const {data, error} = await db.auth.setSession({access_token, refresh_token});
     if (error) throw error;
     await showSession(data.user);
   }, '', 'چوونەژوورەوە یان بارکردنی داشبۆرد سەرکەوتوو نەبوو.');
