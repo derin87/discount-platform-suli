@@ -69,6 +69,11 @@ footer{text-align:center;padding:25px;background:#123d2c;color:white}
   <div id="offers" class="grid">
     <div class="status">چاوەڕێ بە... ئۆفەرەکان دەهێنین.</div>
   </div>
+  <section id="announced-offers" hidden>
+    <h2 class="section-title" id="announced-title">ئۆفەرە ڕاگەیەندراوەکانی سەردەم</h2>
+    <p id="announced-note">بەردەستبوون و بەرواری کۆتایی ئەم ئۆفەرانە پشتڕاست نەکراونەتەوە.</p>
+    <div id="announced-grid" class="grid"></div>
+  </section>
 </main>
 
 <section class="about">
@@ -237,5 +242,6 @@ document.querySelectorAll("#categories button").forEach(button=>{
 updateLanguage();
 loadOffers();
 </script>
+<script src="announced-offers.js"></script>
 </body>
 </html>
