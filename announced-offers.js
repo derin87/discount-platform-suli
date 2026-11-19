@@ -23,6 +23,19 @@
         const card = document.createElement('article');
         card.className = 'card card-body';
         card.style.padding = '16px';
+        const merchant = document.createElement('div');
+        merchant.className = 'offer-merchant';
+        const logo = document.createElement('img');
+        logo.src = 'sardam-logo.jpg';
+        logo.alt = '';
+        logo.width = 44;
+        logo.height = 44;
+        logo.addEventListener('error', () => logo.remove(), {once: true});
+        const merchantName = document.createElement('strong');
+        merchantName.dir = 'auto';
+        merchantName.textContent = language.value === 'en' ? 'Sardam Furniture'
+          : language.value === 'ar' ? 'مفروشات سردم' : 'مۆبیلیاتی سەردەم';
+        merchant.append(logo, merchantName);
         const title = document.createElement('h3');
         title.setAttribute('dir', 'auto');
         title.textContent = row.title_ku;
@@ -38,7 +51,7 @@
           link.textContent = source;
           link.style.marginInlineStart = '12px';
         }
-        card.append(title, price, date, link);
+        card.append(merchant, title, price, date, link);
         return card;
       }));
     }
