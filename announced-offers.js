@@ -20,6 +20,13 @@
     'jcpal-iclara-classic-glass-screen-protector-for-ipad-pro11m4-2024': 25000,
     'esr-ascend-hybrid-case-for-ipad-10th-gen-grey': 25000
   };
+  const productPhotos = {
+    'esr-classic-hybrid-case-halolock-iphone-16-pro-max-clear': 'Artboard_116.png?v=1794670685',
+    'jinya-magsafe-clear-protecting-case-for-iphone-14-pro': 'Artboard_33.png?v=1794666747',
+    'jcpal-iclara-classic-glass-screen-protector-for-ipad-pro11m4-2024': 'Artboard_46.png?v=1794667306',
+    'esr-ascend-hybrid-case-for-ipad-10th-gen-grey': 'Artboard_14.png?v=1794665868'
+  };
+
   const availability = {
     ku: 'ئۆنلاین · تا بەردەستە',
     ar: 'عبر الإنترنت · حسب التوفر',
@@ -71,7 +78,28 @@
           link.style.marginInlineStart = '12px';
         }
         if (!isSardam && link.href) {
-          const original = originalPrices[new URL(link.href).pathname.split('/').pop()];
+          const product = new URL(link.href).pathname.split('/').pop();
+          const photo = productPhotos[product];
+          if (photo) {
+            const image = document.createElement('img');
+            image.src = 'https://www.icenter-iraq.com/cdn/shop/files/' + photo + '&width=940';
+            image.alt = row.title_ku;
+            image.loading = 'lazy';
+            image.decoding = 'async';
+            Object.assign(image.style, {
+              display: 'block',
+              width: '100%',
+              height: 'auto',
+              aspectRatio: '4 / 3',
+              objectFit: 'contain',
+              backgroundColor: '#fff',
+              borderRadius: '10px',
+              marginBlockEnd: '12px'
+            });
+            image.addEventListener('error', () => image.remove(), {once: true});
+            card.append(image);
+          }
+          const original = originalPrices[product];
           if (original > Number(row.price)) {
             const previous = document.createElement('del');
             previous.className = 'old';
