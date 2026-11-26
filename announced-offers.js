@@ -14,6 +14,18 @@
     en: ['iCenter Iraq online offers', 'Sulaymaniyah branch stock and offer end dates are unverified.', 'View product']
   };
 
+  const originalPrices = {
+    'esr-classic-hybrid-case-halolock-iphone-16-pro-max-clear': 20000,
+    'jinya-magsafe-clear-protecting-case-for-iphone-14-pro': 10000,
+    'jcpal-iclara-classic-glass-screen-protector-for-ipad-pro11m4-2024': 25000,
+    'esr-ascend-hybrid-case-for-ipad-10th-gen-grey': 25000
+  };
+  const availability = {
+    ku: 'ئۆنلاین · تا بەردەستە',
+    ar: 'عبر الإنترنت · حسب التوفر',
+    en: 'Online · While available'
+  };
+
   async function load(prefix, rpc, translations, isSardam) {
     const section = document.querySelector('#' + prefix + '-offers');
     const grid = document.querySelector('#' + prefix + '-grid');
@@ -57,6 +69,21 @@
           link.href = row.source_url;
           link.textContent = source;
           link.style.marginInlineStart = '12px';
+        }
+        if (!isSardam && link.href) {
+          const original = originalPrices[new URL(link.href).pathname.split('/').pop()];
+          if (original > Number(row.price)) {
+            const previous = document.createElement('del');
+            previous.className = 'old';
+            previous.textContent = format.format(original);
+            const badge = document.createElement('span');
+            badge.className = 'discount';
+            badge.textContent = '−' + Math.round((1 - row.price / original) * 100) + '%';
+            price.append(' ', previous, ' ', badge);
+          }
+          const status = document.createElement('div');
+          status.textContent = availability[language.value] || availability.ku;
+          merchant.append(status);
         }
         card.append(merchant, title, price);
         if (row.posted_on) card.append(date);
