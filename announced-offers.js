@@ -33,10 +33,10 @@
     en: 'Online · While available'
   };
 
-  async function load(prefix, rpc, translations, isSardam) {
+  async function load(prefix, rpc, translations, isSardam, entries) {
     const section = document.querySelector('#' + prefix + '-offers');
     const grid = document.querySelector('#' + prefix + '-grid');
-    const {data, error} = await db.rpc(rpc);
+    const {data, error} = entries ? { data: entries } : await db.rpc(rpc);
     if (error || !data?.length) return;
 
     function render() {
@@ -58,7 +58,7 @@
         logo.addEventListener('error', () => logo.remove(), {once: true});
         const merchantName = document.createElement('strong');
         merchantName.dir = 'auto';
-        merchantName.textContent = !isSardam ? 'iCenter Iraq' : language.value === 'en' ? 'Sardam Furniture'
+        merchantName.textContent = !isSardam ? (row.merchant || 'iCenter Iraq') : language.value === 'en' ? 'Sardam Furniture'
           : language.value === 'ar' ? 'مفروشات سردم' : 'مۆبیلیاتی سەردەم';
         if (isSardam) merchant.append(logo);
         merchant.append(merchantName);
@@ -72,7 +72,7 @@
         date.dateTime = row.posted_on;
         date.textContent = row.posted_on;
         const link = document.createElement('a');
-        if (row.source_url.startsWith(isSardam ? 'https://www.findglocal.com/' : 'https://www.icenter-iraq.com/products/')) {
+        if (row.source_url.startsWith(isSardam ? 'https://www.findglocal.com/' : entries ? 'https://dima.center/en/product/' : 'https://www.icenter-iraq.com/products/')) {
           link.href = row.source_url;
           link.textContent = source;
           link.style.marginInlineStart = '12px';
@@ -80,9 +80,9 @@
         if (!isSardam && link.href) {
           const product = new URL(link.href).pathname.split('/').pop();
           const photo = productPhotos[product];
-          if (photo) {
+          if (row.photo || photo) {
             const image = document.createElement('img');
-            image.src = 'https://www.icenter-iraq.com/cdn/shop/files/' + photo + '&width=940';
+            image.src = row.photo || 'https://www.icenter-iraq.com/cdn/shop/files/' + photo + '&width=940';
             image.alt = row.title_ku;
             image.loading = 'lazy';
             image.decoding = 'async';
@@ -99,7 +99,7 @@
             image.addEventListener('error', () => image.remove(), {once: true});
             card.append(image);
           }
-          const original = originalPrices[product];
+          const original = row.original || originalPrices[product];
           if (original > Number(row.price)) {
             const previous = document.createElement('del');
             previous.className = 'old';
@@ -124,6 +124,36 @@
     language.addEventListener('change', render);
     section.hidden = false;
   }
+
+  const dimaOffers = [
+    ['Lexar NQ780 SSD 1TB', 270300, 289000, '6a44fbf47bd19ff6267da9e0', '/catalog/6a44fbf47bd19ff6267da9e0-747d5977c0.webp'],
+    ['MSI MAG 255F X24', 221000, 246500, '6aec4178f95fceb4eaa94b41', '/api/media/276a42ec-071c-41a8-a3e9-034602379cb2.webp'],
+    ['MSI PRO MP246 E18', 178500, 204000, '6aec431cf95fceb4eaa94d65', '/api/media/f7019428-bd58-40cf-aaa5-fbd051c95cc8.webp']
+  ].map(([title_ku, price, original, product, photo]) => ({
+    merchant: 'Dima Center', title_ku, price, original,
+    source_url: 'https://dima.center/en/product/' + product,
+    photo: 'https://dima.center' + photo
+  }));
+
+  function showDimaOffers() {
+    const template = document.querySelector('#icenter-offers');
+    if (!template || Date.now() >= Date.parse('2026-11-27T15:00:00+03:00')) return;
+    const section = template.cloneNode(true);
+    section.hidden = true;
+    section.id = 'dima-offers';
+    for (const item of section.querySelectorAll('[id^="icenter-"]')) {
+      item.id = item.id.replace('icenter-', 'dima-');
+    }
+    if (section.hasAttribute('aria-labelledby')) section.setAttribute('aria-labelledby', 'dima-title');
+    template.after(section);
+    void load('dima', null, {
+      ku: ['ئۆفەرەکانی Dima Center', 'نرخ و بەردەستبوون لە پەڕەی فرۆشگا بپشکنە.', 'بینینی کاڵا'],
+      ar: ['عروض Dima Center', 'تحقق من السعر والتوفر على موقع المتجر.', 'عرض المنتج'],
+      en: ['Dima Center offers', 'Check current prices and availability on the store website.', 'View product']
+    }, false, dimaOffers);
+  }
+
+  showDimaOffers();
 
   void load('announced', 'dashka_announced_sardam_offers', copy, true).catch(() => {});
   void load('icenter', 'dashka_announced_icenter_offers', icenterCopy, false).catch(() => {});
